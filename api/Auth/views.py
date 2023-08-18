@@ -91,3 +91,17 @@ class Login(Resource):
             )
         else:
             auth_namespace.abort(HTTPStatus.UNAUTHORIZED, "Invalid credentials")
+
+
+@auth_namespace.route("/refresh")
+class Refresh(Resource):
+    @jwt_required(refresh=True)
+    @auth_namespace.response(
+        HTTPStatus.OK, "Access token refreshed successfully", user_model
+    )
+    @auth_namespace.response(HTTPStatus.UNAUTHORIZED, "Invalid credentials")
+    def post(self):
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        access_token = create_access_token(identity=user)
+        return {"access_token": access_token}, HTTPStatus.OK
