@@ -81,7 +81,6 @@ class User(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
-        return self
 
     def __init__(self, username, first_name, last_name, email, password):
         self.username = username
@@ -92,23 +91,6 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
-
-
-# Phone book model
-class PhoneBook(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, default=generate_hex())
-    name = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(50), default='')
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
-    def __init__(self, name, phone_number, user_id):
-        self.name = name
-        self.phone_number = phone_number
-        self.user_id = user_id
-
-    def __repr__(self):
-        return f'<PhoneBook {self.name}>'
 
 
 # this is to check if the email is in the right format
