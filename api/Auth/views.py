@@ -104,3 +104,13 @@ class Refresh(Resource):
         user = User.query.get(user_id)
         access_token = create_access_token(identity=user)
         return {"access_token": access_token}, HTTPStatus.OK
+
+
+@auth_namespace.route("/logout")
+class Logout(Resource):
+    # @jwt_required()
+    # @auth_namespace.response(HTTPStatus.OK, "User logged out successfully")
+    # @auth_namespace.response(HTTPStatus.UNAUTHORIZED, "Invalid credentials")
+    # def post(self):
+    #     pass
+    pass
