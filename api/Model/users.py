@@ -41,6 +41,8 @@ class User(db.Model):
             raise AssertionError('No email provided')
         if User.query.filter(User.email == email).first():
             raise AssertionError('Email is already in use')
+        if not check_for_valid_email(email):
+            raise AssertionError('Provided email is not an email address')
         return email
 
     def __init__(self, username, first_name, last_name, email, password):
