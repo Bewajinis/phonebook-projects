@@ -17,6 +17,7 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
     phone_book = db.relationship('PhoneBook', backref='user', lazy=True)
 
     # this is to validate the username
@@ -76,7 +77,12 @@ class User(db.Model):
     # this is to check if the password is correct
     def check_password(self, password):
         return sha256.verify(password, self.password)
-    
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
     def __init__(self, username, first_name, last_name, email, password):
         self.username = username
         self.first_name = first_name
