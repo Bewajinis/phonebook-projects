@@ -2,6 +2,7 @@ from utils import db
 import uuid
 from sqlalchemy.orm import validates
 import re
+from passlib.hash import pbkdf2_sha256 as sha256
 
 
 def generate_hex():
@@ -45,6 +46,37 @@ class User(db.Model):
             raise AssertionError('Provided email is not an email address')
         return email
 
+    # this is to validate the first name
+    @validates('first_name')
+    def validate_first_name(self, key, first_name):
+        if not first_name:
+            raise AssertionError('No first name provided')
+        if len(first_name) < 2 or len(first_name) > 50:
+            raise AssertionError('First name must be between 2 and 50 characters')
+        return first_name
+
+    # this is to validate the last name
+    @validates('last_name')
+    def validate_last_name(self, key, last_name):
+        if not last_name:
+            raise AssertionError('No last name provided')
+        if len(last_name) < 2 or len(last_name) > 100:
+            raise AssertionError('Last name must be between 2 and 100 characters')
+        return last_name
+
+    # this is to validate the password
+    @validates('password')
+    def validate_password(self, key, password):
+        if not password:
+            raise AssertionError('No password provided')
+        if len(password) < 8 or len(password) > 100:
+            raise AssertionError('Password must be between 8 and 100 characters')
+        return password
+
+    # this is to check if the password is correct
+    def check_password(self, password):
+        return sha256.verify(password, self.password)
+    
     def __init__(self, username, first_name, last_name, email, password):
         self.username = username
         self.first_name = first_name
