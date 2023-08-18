@@ -1,4 +1,5 @@
 from utils import db
+from sqlalchemy.orm import validates
 from users import generate_hex
 
 
@@ -9,6 +10,11 @@ class Contacts(db.Model):
     phone_number = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), default='')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    @validates('phone_number')
+    def validate_phone_number(self, key, phone_number):
+        if not phone_number.isdigit():
+            raise ValueError('Phone number must be a number')
 
     def __init__(self, name, phone_number, user_id):
         self.name = name
