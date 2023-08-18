@@ -30,15 +30,13 @@ class Contact(Resource):
     def post(self):
         """Create a contact"""
         data = contact_namespace.payload
-        name = data.get("name").lower()
-        phone_number = data.get("phone_number")
-        email = data.get("email").lower()
+        data['name'] = data['name'].strip().lower()
+        data['phone_number'] = data['phone_number'].strip().lower()
+        data['email'] = data['email'].strip().lower()
         user_id = get_jwt_identity()
 
         contact = Contacts(
-            name=name, 
-            phone_number=phone_number,
-            email=email,
+            **data,
             user_id=user_id)
         contact.save()
         return contact
