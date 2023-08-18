@@ -20,9 +20,9 @@ contact_model = contact_namespace.model(
 )
 
 
-# create, get, update, delete a contact
+# create and get a contact
 @contact_namespace.route("/contact")
-class Contact(Resource):
+class CreateGetContact(Resource):
     @contact_namespace.expect(contact_model)
     @contact_namespace.response(
         HTTPStatus.CREATED, "Contact created successfully", contact_model
@@ -47,3 +47,9 @@ class Contact(Resource):
         user_id = get_jwt_identity()
         contacts = Contacts.query.filter_by(user_id=user_id).all()
         return contacts
+
+
+# get, update and delete a contact
+@contact_namespace.route("/contact/<int:id>")
+class GetUpdateDeleteContact(Resource):
+    pass
