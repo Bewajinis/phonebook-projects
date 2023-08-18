@@ -18,7 +18,7 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_active = db.Column(db.Boolean, default=True)
-    phone_book = db.relationship('PhoneBook', backref='user', lazy=True)
+    phone_book = db.relationship('Contacts', backref='user', lazy=True, cascade='all, delete-orphan')
 
     # this is to validate the username
     @validates('username')
