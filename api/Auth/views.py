@@ -31,5 +31,5 @@ user_model = auth_namespace.model(
 )
 
 
-# @auth_namespace.route('/signup')
-# class Signup(Resource):
+@auth_namespace.route('/signup')
+class Signup(Resource)
